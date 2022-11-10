@@ -102,3 +102,34 @@ changes, but in summary:
 required by the NDP1000 for normal operation
 * In wiring.c, all GPIO pins are initially disabled rather than left to float.
 (Floating input lines can be a source of extra power consumption.)
+
+## Arduino CLI
+
+We can use [Arduino CLI](https://arduino.github.io/arduino-cli) to build codes and upload binaries. The following commands have been tested with Arduino CLI v0.28.0.
+
+Use the following command to build codes in the root folder of this Github repository.
+
+```
+arduino-cli compile --fqbn arduino:samd:mkrzero \
+    --libraries Arduino/libraries \
+    --build-property '-DUSE_ARDUINO_MKR_PIN_LAYOUT -D__SAMD21G18A__ -DUSB_VID=0x2341 -DUSB_PID=0x804f -DUSBCON -DUSB_MANUFACTURER="Syntiant" -DUSB_PRODUCT="TinyML"' \
+    --output-dir . \
+    TinyML_audio_lowpower
+```
+
+As built complete, there are output artifacts in the current folder, including:
+
+```
+TinyML_audio_lowpower.ino.bin
+TinyML_audio_lowpower.ino.elf
+TinyML_audio_lowpower.ino.hex
+TinyML_audio_lowpower.ino.map
+TinyML_audio_lowpower.ino.with_bootloader.bin
+TinyML_audio_lowpower.ino.with_bootloader.hex
+```
+
+Use the following command to upload binaries. Please replace the serial port name of the TinyML board on your computer.
+
+```
+arduino-cli upload --fqbn arduino:samd:mkrzero --input-dir . -v -p /dev/ttyACM0
+```
